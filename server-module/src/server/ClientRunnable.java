@@ -19,8 +19,6 @@ import java.nio.file.Paths;
 
 public class ClientRunnable implements Runnable {
 
-    private static int nextID = 0;
-
     private int id;
     private ServerRunnable server;
     private Socket socket;
@@ -31,16 +29,10 @@ public class ClientRunnable implements Runnable {
         return this.id;
     }
 
-    ClientRunnable(ServerRunnable server, Socket socket) {
+    ClientRunnable(int id, ServerRunnable server, Socket socket) {
+        this.id = id;
         this.server = server;
         this.socket = socket;
-
-
-        this.id = nextID;
-        nextID++;
-
-        Thread th = new Thread(this);
-        th.start();
     }
 
     private void close() throws IOException {
@@ -140,11 +132,9 @@ public class ClientRunnable implements Runnable {
                     this.close();
                     return;
                 } catch (IOException ex1) {
-                    //
+                    // Ignored situation.
                 }
             }
         }
     }
-
-
 }

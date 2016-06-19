@@ -5,8 +5,8 @@ import main.Const;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author Edwin
@@ -15,13 +15,14 @@ import java.util.List;
 public class ServerRunnable implements Runnable {
 
     private ServerSocket socket;
-    private List<ClientRunnable> clients;
     private boolean running = true;
+    private int client_id = 0;
+    private ExecutorService threadPool;
 
     ServerRunnable() {
         try {
+            threadPool = Executors.newCachedThreadPool();
             socket = new ServerSocket(Const.PORT);
-            clients = new ArrayList<>();
         } catch (IOException ex) {
             running = false;
             System.out.println("Unable to start server");
@@ -36,20 +37,34 @@ public class ServerRunnable implements Runnable {
             while (isRunning()) {
                 Socket clientSocket = socket.accept();
 
-                System.out.println("Client connected");
+                ClientRunnable client = new ClientRunnable(client_id, this, clientSocket);
+                Thread clientThread = new Thread(client);
+                threadPool.execute(clientThread);
 
-                this.clients.add(new ClientRunnable(this, clientSocket));
+                System.out.format("Thread with ID %s has just connected.\r\n", client_id);
+
+                addClientId();
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
     }
 
-    synchronized boolean isRunning() {
-        return this.running;
+    /**
+     * Synchronized because when two clients do a request at the same time,
+     * there will be a race condition.
+     */
+    private synchronized void addClientId() {
+        client_id++;
     }
 
-    void removeClient(ClientRunnable client) {
-        this.clients.remove(client);
+    /**
+     * Same story, race condition is possible when polling for running while
+     * another thread has just changed the running variable.
+     *
+     * @return bool indicating the value of running
+     */
+    synchronized boolean isRunning() {
+        return this.running;
     }
 }
