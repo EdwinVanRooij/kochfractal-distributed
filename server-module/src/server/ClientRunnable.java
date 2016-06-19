@@ -22,9 +22,10 @@ public class ClientRunnable implements Runnable {
     private int id;
     private ServerRunnable server;
     private Socket socket;
-    private boolean alive = false;
-    private KochManager manager;
+    private BufferedReader in;
     private DataOutputStream out;
+    private boolean alive = false;
+    private KochManager manager = null;
 
     public int getID() {
         return this.id;
@@ -35,12 +36,18 @@ public class ClientRunnable implements Runnable {
     }
 
     ClientRunnable(int id, ServerRunnable server, Socket socket) {
-        this.id = id;
-        this.server = server;
-        this.socket = socket;
-
         try {
+            this.server = server;
+            this.socket = socket;
+
             this.out = new DataOutputStream(socket.getOutputStream());
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
+            this.id = id;
+            this.server = server;
+            this.socket = socket;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,11 +81,8 @@ public class ClientRunnable implements Runnable {
         alive = true;
 
         while (server.isRunning() && alive) {
-            try (InputStream is = socket.getInputStream();
-                 InputStreamReader isr = new InputStreamReader(is);
-                 BufferedReader reader = new BufferedReader(isr)) {
-
-                String line = reader.readLine();
+            try {
+                String line = in.readLine();
 
                 if (line == null) {
                     this.close();
