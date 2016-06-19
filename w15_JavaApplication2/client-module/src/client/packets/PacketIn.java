@@ -1,22 +1,22 @@
 package client.packets;
 
 
-import client.Client;
-
-import java.util.HashMap;
+import client.packets.in.PacketIn01FractalInfo;
+import client.packets.in.PacketIn02EdgeSingle;
+import client.packets.in.PacketIn03FractalDone;
 
 /**
  * @author Cas Eliens
  */
 public abstract class PacketIn extends Packet {
 
-    private static HashMap<Integer, String> lastpack = new HashMap<Integer, String>();
-
+    private static String lastpack = "";
+    
     public PacketIn(PacketType type) {
         super(type);
     }
 
-    public static PacketIn parse(Client client, String data) {
+    public static PacketIn parse(String data) {
         PacketType type = null;
 
         // Trim unnecessary characters off of data string
@@ -29,22 +29,27 @@ public abstract class PacketIn extends Packet {
             data = data.substring(0, data.indexOf("=="));
         }
 
-        // Partial packetstring
-        if (data.startsWith("++") && !data.endsWith("==")) {
-            lastpack.put(client.getID(), data);
+        // String should at least have 2 characters (= packet type id)
+        if (data.length() < 2) {
+            return null;
         }
 
-        if (!data.startsWith("++") && !lastpack.containsKey(client.getID())) {
-            lastpack.put(client.getID(), lastpack.get(client.getID()) + data);
+        // Partial packetstring
+        if (data.startsWith("++") && !data.endsWith("==")) {
+            lastpack = data;
+        }
+
+        if (!data.startsWith("++") && !lastpack.equals("")) {
+            lastpack += data;
         }
 
         if (data.startsWith("++") && data.endsWith("==")) {
             // Reset if data string is correct
-            lastpack.remove(client.getID());
-        } else if (lastpack.containsKey(client.getID()) && lastpack.get(client.getID()).startsWith("++") && lastpack.get(client.getID()).endsWith("==")) {
+            lastpack = "";
+        } else if (lastpack.startsWith("++") && lastpack.endsWith("==")) {
             // Last pack is correct data string
-            data = lastpack.get(client.getID());
-            lastpack.remove(client.getID());
+            data = lastpack;
+            lastpack = "";
         } else {
             // Incorrect data string
             return null;
@@ -52,7 +57,7 @@ public abstract class PacketIn extends Packet {
 
         // Remove '++' and '=='
         data = data.substring(2, data.length() - 2);
-
+        
         // String should at least have 2 characters (= packet type id)
         if (data.length() < 2) {
             return null;
@@ -65,18 +70,15 @@ public abstract class PacketIn extends Packet {
             return null;
         }
 
-        // Remove type id
         data = data.substring(2);
 
         switch (type) {
-            case REQUEST_START_CALC:
-                return new PacketIn00RequestStartCalc(data);
-            case ZOOM:
-                return new PacketIn04Zoom(data);
-            case PRESS:
-                return new PacketIn05Press(data);
-            case DRAG:
-                return new PacketIn06Drag(data);
+            case FRACTALINFO:
+                return new PacketIn01FractalInfo(data);
+            case EDGE_SINGLE:
+                return new PacketIn02EdgeSingle(data);
+            case FRACTALDONE:
+                return new PacketIn03FractalDone(data);
         }
 
         return null;

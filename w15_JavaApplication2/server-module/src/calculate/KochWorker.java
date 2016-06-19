@@ -2,7 +2,7 @@ package calculate;
 
 import main.Edge;
 import main.EdgeRequestMode;
-import server.Client;
+import server.ClientRunnable;
 import server.packets.out.PacketOut01FractalInfo;
 import server.packets.out.PacketOut02EdgeSingle;
 import server.packets.out.PacketOut03FractalDone;
@@ -29,12 +29,12 @@ public class KochWorker implements Observer, Runnable {
     private Thread thread;
     private boolean done = false, running = true, allowMode = true;
     private EdgeRequestMode mode;
-    private Client client;
+    private ClientRunnable client;
     private KochManager manager;
 
     private int edgesWritten = 0;
 
-    public KochWorker(Client client, EdgeRequestMode mode, int level, KochManager manager, boolean allowMode) {
+    public KochWorker(ClientRunnable client, EdgeRequestMode mode, int level, KochManager manager, boolean allowMode) {
         this.client = client;
         this.mode = mode;
         this.manager = manager;

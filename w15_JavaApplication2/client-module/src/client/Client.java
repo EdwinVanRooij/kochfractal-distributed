@@ -1,160 +1,344 @@
 package client;
 
 import calculate.KochManager;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
+import client.packets.out.PacketOut04Zoom;
+import client.packets.out.PacketOut05Press;
+import client.packets.out.PacketOut06Drag;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import main.Edge;
+import main.EdgeRequestMode;
+import main.ZoomType;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import client.packets.PacketIn;
-import client.packets.in.*;
 
 /**
+ *
  * @author Cas Eliens
  */
-public class Client implements Runnable {
+public class Client extends Application {
 
-    private Socket socket;
-    private BufferedReader in;
-    private DataOutputStream out;
-    private boolean running = false, calculating = false;
-    private KochManager man;
+    // Client
+    private ClientRunnable client;
 
-    public Client(KochManager kochManager) {
-        this.man = kochManager;
+    // Zoom and drag
+    /*
+     private double zoomTranslateX = 0.0;
+     private double zoomTranslateY = 0.0;
+     private double zoom = 1.0;
+     private double startPressedX = 0.0;
+     private double startPressedY = 0.0;
+     private double lastDragX = 0.0;
+     private double lastDragY = 0.0;
+     */
+    // Kochmanager instance
+    private KochManager kochManager;
 
-        Thread th = new Thread(this);
-        th.start();
+    // Main stage
+    private Stage primaryStage;
+
+    // JavaFX items
+    private Label lbNrEdgesText, lbNrEdges, lbLevel, lbMode;
+
+    private Canvas cvPanel;
+    private final int panelWidth = 500;
+    private final int panelHeight = 500;
+
+    public static void main(String[] args) {
+        launch(args);
     }
 
     @Override
-    public void run() {
-        try {
-            //socket = new Socket("192.168.117.1", 2585);
-            socket = new Socket("localhost", 2585);
+    public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
 
-            if (socket == null) {
-                log("Unable to connect to server");
-                return;
+        // Define grid pane
+        GridPane grid;
+        grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+
+        // Add panel
+        cvPanel = new Canvas(panelWidth, panelHeight);
+        grid.add(cvPanel, 0, 3, 25, 1);
+
+        // Labels to present number of edges for Koch fractal
+        lbNrEdgesText = new Label("Nr edges:");
+        lbNrEdges = new Label(" 0");
+        grid.add(lbNrEdgesText, 0, 0, 4, 1);
+        grid.add(lbNrEdges, 1, 0);
+
+        // Label to present current level of Koch fractal
+        lbLevel = new Label("Level: X");
+        grid.add(lbLevel, 0, 6);
+
+        // Button to fit Koch fractal in Koch panel
+        Button buttonFitFractal = new Button();
+        buttonFitFractal.setText("Fit Fractal");
+        buttonFitFractal.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                fitFractalButtonActionPerformed(event);
             }
+        });
+        grid.add(buttonFitFractal, 1, 6);
 
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new DataOutputStream(socket.getOutputStream());
+        // Button to connect to server
+        Button buttonConnect = new Button();
+        buttonConnect.setText("Connect");
+        buttonConnect.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                connectButtonActionPerformed(event);
+            }
+        });
+        grid.add(buttonConnect, 2, 6);
 
-        } catch (IOException ex) {
-            log("Unable to connect to server");
-            return;
-        }
+        // Button to increase fractal level
+        Button buttonIncreaseLevel = new Button();
+        buttonIncreaseLevel.setText("Increase level");
+        buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                increaseLevelButtonActionPerformed(event);
+            }
+        });
+        grid.add(buttonIncreaseLevel, 3, 6);
 
-        running = true;
+        // Button to decrease fractal level
+        Button buttonDecreaseLevel = new Button();
+        buttonDecreaseLevel.setText("Decrease level");
+        buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                decreaseLevelButtonActionPerformed(event);
+            }
+        });
+        grid.add(buttonDecreaseLevel, 4, 6);
 
-        log("Started listening");
-        try {
-            while (running) {
+        // Button to switch between request modes
+        Button buttonSwitchMode = new Button();
+        buttonSwitchMode.setText("Switch mode");
+        buttonSwitchMode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                switchModeButtonActionPerformed(event);
+            }
+        });
+        grid.add(buttonSwitchMode, 0, 7);
+
+        lbMode = new Label("Mode: Single request");
+        grid.add(lbMode, 1, 7, 2, 1);
+
+        // Add mouse clicked event to Koch panel
+        cvPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        kochPanelMouseClicked(event);
+                    }
+                });
+
+        // Add mouse pressed event to Koch panel
+        cvPanel.addEventHandler(MouseEvent.MOUSE_PRESSED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        kochPanelMousePressed(event);
+                    }
+                });
+
+        // Add mouse released event to Koch panel
+        cvPanel.addEventHandler(MouseEvent.MOUSE_RELEASED,
+                new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        kochPanelMouseReleased(event);
+                    }
+                });
+
+        // Add mouse dragged event to Koch panel
+        cvPanel.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                kochPanelMouseDragged(event);
+            }
+        });
+
+        // Create Koch manager
+        clearKochPanel();
+        kochManager = new KochManager(this);
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                kochManager.exit();
                 try {
-                    String line = in.readLine();
-
-                    if (line == null) {
-                        this.close();
-                        return;
-                    }
-
-                    // Handle packets
-                    PacketIn pack = PacketIn.parse(line);
-
-                    // Ignore if invalid packet
-                    if (pack == null) {
-                        continue;
-                    }
-
-                    switch (pack.getType()) {
-                        case FRACTALINFO:
-                            log("Received fractal info packet");
-                            PacketIn01FractalInfo fracInfo = (PacketIn01FractalInfo) pack;
-                            man.setLevel(fracInfo.getLevel(), false);
-                            man.setEdgeCount(fracInfo.getEdgeCount());
-
-                            calculating = true;
-                            break;
-                        case EDGE_SINGLE:
-                            if (!calculating) {
-                                log("Received invalid edge packet");
-                                break;
-                            }
-
-                            // Add edge to kochmanager
-                            PacketIn02EdgeSingle edgeSingle = (PacketIn02EdgeSingle) pack;
-                            if (edgeSingle.getLevel() == man.getLevel()) {
-                                man.addEdge(this, edgeSingle.getEdge(), edgeSingle.doAllowMode());
-                            }
-                            break;
-                        case FRACTALDONE:
-                            PacketIn03FractalDone fractalDone = (PacketIn03FractalDone) pack;
-
-                            if (fractalDone.getLevel() == man.getLevel() && calculating) {
-                                log("Fractal done");
-
-                                calculating = false;
-                                man.doneReading(fractalDone.doAllowMode());
-                            }
-                            break;
-                    }
-                    ///////////
-                } catch (IllegalArgumentException ex) {
-                    System.err.println("Error: " + ex.getMessage());
+                    client.close();
+                } catch (IOException ex) {
+                    // Ignore
                 }
             }
-        } catch (IOException ex) {
-            try {
-                this.close();
-            } catch (IOException ex1) {
-                //
-            }
-        }
+        });
+
+        // Create the scene and add the grid pane
+        Group root = new Group();
+        Scene scene = new Scene(root, panelWidth + 50, panelHeight + 200);
+        root.getChildren().add(grid);
+
+        // Define title and assign the scene for main window
+        primaryStage.setTitle("Koch Fractal");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        // Initiate client
+        client = new ClientRunnable(kochManager);
     }
 
-    public void sendMessageRaw(String message) {
-        if (!running) {
-            return;
+    public void clearKochPanel() {
+        GraphicsContext gc = cvPanel.getGraphicsContext2D();
+        gc.clearRect(0.0, 0.0, panelWidth, panelHeight);
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0.0, 0.0, panelWidth, panelHeight);
+    }
+
+    public synchronized void drawEdge(Edge e, boolean temp) {
+        // Graphics
+        GraphicsContext gc = cvPanel.getGraphicsContext2D();
+
+        // Set line color
+        if (temp) {
+            gc.setStroke(Color.WHITE);
+        } else {
+            gc.setStroke(e.color);
         }
 
+        // Set line width depending on level
+        if (kochManager.getLevel() <= 3) {
+            gc.setLineWidth(2.0);
+        } else if (kochManager.getLevel() <= 5) {
+            gc.setLineWidth(1.5);
+        } else {
+            gc.setLineWidth(1.0);
+        }
+
+        // Draw line
+        gc.strokeLine(e.X1, e.Y1, e.X2, e.Y2);
+    }
+
+    // Labels
+    public void setTextNrEdges(String text) {
+        lbNrEdges.setText(text);
+    }
+
+    public void setLevel(int level) {
+        lbLevel.setText("Level: " + kochManager.getLevel());
+    }
+
+    // Event handlers
+    private void fitFractalButtonActionPerformed(ActionEvent event) {
         try {
-            out.writeBytes(message + "\n");
-            out.flush();
+            PacketOut04Zoom zoomPack = new PacketOut04Zoom(ZoomType.RESET, 0, 0);
+            zoomPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public DataOutputStream getOutputStream() {
-        return out;
-    }
-
-    public boolean isRunning() {
-        return this.running;
-    }
-
-    public void close() throws IOException {
-        if (!running) {
-            return;
+    private void connectButtonActionPerformed(ActionEvent event) {
+        if (!client.isRunning()) {
+            client = new ClientRunnable(kochManager);
         }
-
-        log("Lost connection");
-
-        running = false;
-        socket.close();
     }
 
-    public synchronized boolean isCalculating() {
-        return this.calculating;
+    private void increaseLevelButtonActionPerformed(ActionEvent event) {
+        if (kochManager.getLevel() < 10) {
+            kochManager.setLevel(kochManager.getLevel() + 1);
+        }
     }
 
-    public void log(String message) {
-        Throwable t = new Throwable();
-        StackTraceElement[] elements = t.getStackTrace();
+    private void decreaseLevelButtonActionPerformed(ActionEvent event) {
+        if (kochManager.getLevel() > 1) {
+            kochManager.setLevel(kochManager.getLevel() - 1);
+        }
+    }
 
-        System.out.println("(" + elements[1].getClassName() + "." + elements[1].getMethodName() + ":" + elements[1].getLineNumber() + "): " + message);
+    private void switchModeButtonActionPerformed(ActionEvent event) {
+        if (!client.isCalculating()) {
+            if (kochManager.getMode() == EdgeRequestMode.Single) {
+                kochManager.setMode(EdgeRequestMode.EachEdge);
+                lbMode.setText("Each edge");
+            } else {
+                kochManager.setMode(EdgeRequestMode.Single);
+                lbMode.setText("Single request");
+            }
+        }
+    }
+
+    private void kochPanelMouseClicked(MouseEvent event) {
+        try {
+            ZoomType type = ZoomType.RESET;
+            if (event.getButton() == MouseButton.PRIMARY) {
+                type = ZoomType.INCREASE;
+            } else if (event.getButton() == MouseButton.SECONDARY) {
+                type = ZoomType.DECREASE;
+            }
+
+            PacketOut04Zoom zoomPack = new PacketOut04Zoom(type, event.getX(), event.getY());
+            zoomPack.sendData(client.getOutputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void kochPanelMouseDragged(MouseEvent event) {
+        /*
+         try {
+         PacketOut06Drag dragPack = new PacketOut06Drag(event.getX(), event.getY());
+         dragPack.sendData(client.getOutputStream());
+         } catch (IOException ex) {
+         Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         */
+    }
+
+    private void kochPanelMousePressed(MouseEvent event) {
+        try {
+            PacketOut05Press pressPack = new PacketOut05Press(event.getX(), event.getY());
+            pressPack.sendData(client.getOutputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void kochPanelMouseReleased(MouseEvent event) {
+        try {
+            PacketOut06Drag dragPack = new PacketOut06Drag(event.getX(), event.getY());
+            dragPack.sendData(client.getOutputStream());
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // Other stuffs
+    public ClientRunnable getClient() {
+        return this.client;
     }
 }

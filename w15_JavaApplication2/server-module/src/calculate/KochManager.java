@@ -1,8 +1,8 @@
 package calculate;
 
 import main.*;
-import server.Client;
-import server.Server;
+import server.ClientRunnable;
+import server.ServerRunnable;
 import server.packets.out.PacketOut01FractalInfo;
 import server.packets.out.PacketOut02EdgeSingle;
 import server.packets.out.PacketOut03FractalDone;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class KochManager implements Serializable {
 
-    private Server server;
+    private ServerRunnable server;
     private int level;
     private KochWorker manager;
     private Thread workerThread;
@@ -41,14 +41,14 @@ public class KochManager implements Serializable {
     private double lastDragX = 0.0;
     private double lastDragY = 0.0;
 
-    public KochManager(Server server, int level) {
+    public KochManager(ServerRunnable server, int level) {
         this.server = server;
         this.level = level;
 
         resetZoom();
     }
 
-    public void calculate(EdgeRequestMode mode, Client client, boolean allowMode) {
+    public void calculate(EdgeRequestMode mode, ClientRunnable client, boolean allowMode) {
         // Check cache
         String path = "/mnt/tempdisk/usercache" + client.getID() + ".rand";
         File file = new File(path);
@@ -104,7 +104,7 @@ public class KochManager implements Serializable {
         workerThread.start();
     }
 
-    public void readCacheFile(Client client, boolean allowMode) {
+    public void readCacheFile(ClientRunnable client, boolean allowMode) {
         server.log("Reading cache file for client #" + client.getID());
 
         FileLock lock = null;

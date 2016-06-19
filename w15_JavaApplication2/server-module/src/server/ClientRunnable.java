@@ -16,19 +16,19 @@ import java.util.logging.Logger;
 /**
  * @author Cas Eliens
  */
-public class Client implements Runnable {
+public class ClientRunnable implements Runnable {
 
     private static int nextID = 0;
 
     private int id;
-    private Server server;
+    private ServerRunnable server;
     private Socket socket;
     private BufferedReader in;
     private DataOutputStream out;
     private boolean alive = false;
     private KochManager manager = null;
 
-    public Client(Server server, Socket socket) {
+    public ClientRunnable(ServerRunnable server, Socket socket) {
         try {
             this.server = server;
             this.socket = socket;
@@ -42,7 +42,7 @@ public class Client implements Runnable {
             Thread th = new Thread(this);
             th.start();
         } catch (IOException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClientRunnable.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -149,7 +149,7 @@ public class Client implements Runnable {
         }
     }
 
-    public Server getServer() {
+    public ServerRunnable getServer() {
         return this.server;
     }
 
@@ -171,7 +171,7 @@ public class Client implements Runnable {
                 out.writeBytes(message);
                 out.flush();
             } catch (IOException ex) {
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex.getMessage());
+                Logger.getLogger(ClientRunnable.class.getName()).log(Level.SEVERE, null, ex.getMessage());
             }
         }
     }

@@ -1,11 +1,11 @@
 package calculate;
 
-import client.Client;
+import client.ClientRunnable;
 import client.packets.out.PacketOut00RequestStartCalc;
 import javafx.application.Platform;
 import main.Edge;
 import main.EdgeRequestMode;
-import w15_javaapplication2.Main;
+import client.Client;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,12 +19,12 @@ import java.util.logging.Logger;
  */
 public class KochManager {
 
-    private Main app;
+    private Client app;
     private List<Edge> edges, tempEdges;
     private int level, edgeCount;
     private EdgeRequestMode mode = EdgeRequestMode.Single;
 
-    public KochManager(Main app) {
+    public KochManager(Client app) {
         this.app = app;
         this.edges = new ArrayList();
         this.tempEdges = new ArrayList();
@@ -76,7 +76,7 @@ public class KochManager {
         this.tempEdges = new ArrayList(edges);
     }
 
-    public synchronized void addEdge(Client client, Edge edge, boolean allowMode) {
+    public synchronized void addEdge(ClientRunnable client, Edge edge, boolean allowMode) {
         if (mode == EdgeRequestMode.Single || !allowMode) {
             this.tempEdges.add(edge);
         } else {

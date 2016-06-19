@@ -1,6 +1,6 @@
 package server.packets;
 
-import server.Client;
+import server.ClientRunnable;
 import server.packets.in.PacketIn00RequestStartCalc;
 import server.packets.in.PacketIn04Zoom;
 import server.packets.in.PacketIn05Press;
@@ -19,7 +19,7 @@ public abstract class PacketIn extends Packet {
         super(type);
     }
 
-    public static PacketIn parse(Client client, String data) {
+    public static PacketIn parse(ClientRunnable client, String data) {
         PacketType type = null;
 
         // Trim unnecessary characters off of data string
