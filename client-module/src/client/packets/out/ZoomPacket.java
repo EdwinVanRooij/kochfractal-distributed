@@ -12,12 +12,12 @@ import java.io.IOException;
 /**
  * @author Edwin
  */
-public class PacketOut04Zoom extends PacketOut {
+public class ZoomPacket extends PacketOut {
 
     private ZoomType zoom;
     private Vector2 position;
 
-    public PacketOut04Zoom(ZoomType zoom, double x, double y) {
+    public ZoomPacket(ZoomType zoom, double x, double y) {
         super(PacketType.ZOOM);
 
         this.zoom = zoom;

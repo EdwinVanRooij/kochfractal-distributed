@@ -9,11 +9,11 @@ import server.packets.PacketType;
  * @author Edwin
  */
 
-public class PacketIn06Drag extends PacketIn {
+public class DragPacket extends PacketIn {
 
     private Vector2 position;
 
-    public PacketIn06Drag(String data) {
+    public DragPacket(String data) {
         super(PacketType.DRAG);
 
         String[] args = data.split(Packet.separator);

@@ -1,10 +1,10 @@
 package server.packets;
 
 import server.ClientRunnable;
-import server.packets.in.PacketIn00RequestStartCalc;
-import server.packets.in.PacketIn04Zoom;
-import server.packets.in.PacketIn05Press;
-import server.packets.in.PacketIn06Drag;
+import server.packets.in.RequestCalcPacket;
+import server.packets.in.ZoomPacket;
+import server.packets.in.PressPacket;
+import server.packets.in.DragPacket;
 
 import java.util.HashMap;
 
@@ -74,13 +74,13 @@ public abstract class PacketIn extends Packet {
 
         switch (type) {
             case REQUEST_START_CALC:
-                return new PacketIn00RequestStartCalc(data);
+                return new RequestCalcPacket(data);
             case ZOOM:
-                return new PacketIn04Zoom(data);
+                return new ZoomPacket(data);
             case PRESS:
-                return new PacketIn05Press(data);
+                return new PressPacket(data);
             case DRAG:
-                return new PacketIn06Drag(data);
+                return new DragPacket(data);
         }
 
         return null;

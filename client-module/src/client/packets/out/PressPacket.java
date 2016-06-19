@@ -11,11 +11,11 @@ import java.io.IOException;
 /**
  * @author Edwin
  */
-public class PacketOut05Press extends PacketOut {
+public class PressPacket extends PacketOut {
 
     private Vector2 position;
 
-    public PacketOut05Press(double x, double y) {
+    public PressPacket(double x, double y) {
         super(PacketType.PRESS);
 
         position = new Vector2(x, y);

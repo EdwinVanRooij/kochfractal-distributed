@@ -3,9 +3,9 @@ package calculate;
 import main.*;
 import server.ClientRunnable;
 import server.ServerRunnable;
-import server.packets.out.PacketOut01FractalInfo;
-import server.packets.out.PacketOut02EdgeSingle;
-import server.packets.out.PacketOut03FractalDone;
+import server.packets.out.FractalInfoPacket;
+import server.packets.out.EdgePacket;
+import server.packets.out.FractalDonePacket;
 
 import java.io.File;
 import java.io.IOException;
@@ -122,7 +122,7 @@ public class KochManager implements Serializable {
 
             // Send info to client
             try {
-                PacketOut01FractalInfo infoPack = new PacketOut01FractalInfo(level, edgeCount);
+                FractalInfoPacket infoPack = new FractalInfoPacket(level, edgeCount);
                 infoPack.sendData(client.getOutputStream());
             } catch (SocketException ex) {
                 System.out.println("Failed to send info packet to client");
@@ -139,14 +139,14 @@ public class KochManager implements Serializable {
                 Vector3 color = new Vector3(out.getDouble(), out.getDouble(), out.getDouble());
 
                 // Send packet to client
-                PacketOut02EdgeSingle edgePack = new PacketOut02EdgeSingle(level, this.edgeAfterZoomAndDrag(new Edge(side1, side2, color)), allowMode);
+                EdgePacket edgePack = new EdgePacket(level, this.edgeAfterZoomAndDrag(new Edge(side1, side2, color)), allowMode);
                 edgePack.sendData(client.getOutputStream());
 
                 lock.release();
             }
 
             // Notify client that the calculating is done
-            PacketOut03FractalDone donePack = new PacketOut03FractalDone(level, allowMode);
+            FractalDonePacket donePack = new FractalDonePacket(level, allowMode);
             donePack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             ex.printStackTrace();

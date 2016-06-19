@@ -1,37 +1,40 @@
 package server.packets.in;
 
-import main.Vector2;
 import server.packets.Packet;
 import server.packets.PacketIn;
 import server.packets.PacketType;
+import main.EdgeRequestMode;
 
 /**
  * @author Edwin
  */
 
-public class PacketIn05Press extends PacketIn {
+public class RequestCalcPacket extends PacketIn {
 
-    private Vector2 position;
+    private int level;
+    private EdgeRequestMode mode;
 
-    public PacketIn05Press(String data) {
-        super(PacketType.PRESS);
+    public RequestCalcPacket(String data) {
+        super(PacketType.REQUEST_START_CALC);
 
         String[] args = data.split(Packet.separator);
-
         if (args.length < 2) {
             throw new IllegalArgumentException("Invalid packet format");
         }
 
         try {
-            double x = Double.parseDouble(args[0]);
-            double y = Double.parseDouble(args[1]);
-            position = new Vector2(x, y);
+            level = Integer.parseInt(args[0]);
+            mode = EdgeRequestMode.fromName(args[1]);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Invalid packet data");
         }
     }
 
-    public Vector2 getPosition() {
-        return this.position;
+    public int getLevel() {
+        return this.level;
+    }
+
+    public EdgeRequestMode getMode() {
+        return this.mode;
     }
 }

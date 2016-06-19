@@ -10,13 +10,13 @@ import main.Vector3;
 /**
  * @author Edwin
  */
-public class PacketIn02EdgeSingle extends PacketIn {
+public class EdgePacket extends PacketIn {
 
     private int level;
     private Edge edge;
     private boolean allowMode;
 
-    public PacketIn02EdgeSingle(String data) {
+    public EdgePacket(String data) {
         super(PacketType.EDGE_SINGLE);
 
         String[] args = data.split(Packet.separator);

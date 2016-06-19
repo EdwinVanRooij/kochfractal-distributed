@@ -11,11 +11,11 @@ import java.io.IOException;
 /**
  * @author Edwin
  */
-public class PacketOut06Drag extends PacketOut {
+public class DragPacket extends PacketOut {
 
     private Vector2 position;
 
-    public PacketOut06Drag(double x, double y) {
+    public DragPacket(double x, double y) {
         super(PacketType.DRAG);
 
         position = new Vector2(x, y);

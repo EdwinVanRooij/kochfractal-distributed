@@ -1,9 +1,9 @@
 package client;
 
 import calculate.KochManager;
-import client.packets.out.PacketOut04Zoom;
-import client.packets.out.PacketOut05Press;
-import client.packets.out.PacketOut06Drag;
+import client.packets.out.ZoomPacket;
+import client.packets.out.PressPacket;
+import client.packets.out.DragPacket;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Edwin
  */
 public class Client extends Application {
@@ -54,7 +53,7 @@ public class Client extends Application {
     private Stage primaryStage;
 
     // JavaFX items
-    private Label lbNrEdgesText, lbNrEdges, lbLevel, lbMode;
+    private Label lbNrEdgesText, lbNrEdges, lbLevel;
 
     private Canvas cvPanel;
     private final int panelWidth = 500;
@@ -134,18 +133,26 @@ public class Client extends Application {
         grid.add(buttonDecreaseLevel, 4, 6);
 
         // Button to switch between request modes
-        Button buttonSwitchMode = new Button();
-        buttonSwitchMode.setText("Switch mode");
-        buttonSwitchMode.setOnAction(new EventHandler<ActionEvent>() {
+        Button allAtOnce = new Button();
+        allAtOnce.setText("All at once");
+        allAtOnce.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                switchModeButtonActionPerformed(event);
+                allAtOnceButtonActionPerformed();
             }
         });
-        grid.add(buttonSwitchMode, 0, 7);
+        grid.add(allAtOnce, 0, 7);
 
-        lbMode = new Label("Mode: Single request");
-        grid.add(lbMode, 1, 7, 2, 1);
+        Button oneByOne = new Button();
+        oneByOne.setText("One by one");
+        oneByOne.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                oneByOneButtonActionPerformed();
+            }
+        });
+        grid.add(oneByOne, 1, 7);
+
 
         // Add mouse clicked event to Koch panel
         cvPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -200,7 +207,7 @@ public class Client extends Application {
 
         // Create the scene and add the grid pane
         Group root = new Group();
-        Scene scene = new Scene(root, panelWidth + 50, panelHeight + 200);
+        Scene scene = new Scene(root, panelWidth + 150, panelHeight + 250);
         root.getChildren().add(grid);
 
         // Define title and assign the scene for main window
@@ -255,7 +262,7 @@ public class Client extends Application {
     // Event handlers
     private void fitFractalButtonActionPerformed(ActionEvent event) {
         try {
-            PacketOut04Zoom zoomPack = new PacketOut04Zoom(ZoomType.RESET, 0, 0);
+            ZoomPacket zoomPack = new ZoomPacket(ZoomType.RESET, 0, 0);
             zoomPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -280,15 +287,15 @@ public class Client extends Application {
         }
     }
 
-    private void switchModeButtonActionPerformed(ActionEvent event) {
+    private void allAtOnceButtonActionPerformed() {
         if (!client.isCalculating()) {
-            if (kochManager.getMode() == EdgeRequestMode.Single) {
-                kochManager.setMode(EdgeRequestMode.EachEdge);
-                lbMode.setText("Each edge");
-            } else {
-                kochManager.setMode(EdgeRequestMode.Single);
-                lbMode.setText("Single request");
-            }
+            kochManager.setMode(EdgeRequestMode.Single);
+        }
+    }
+
+    private void oneByOneButtonActionPerformed() {
+        if (!client.isCalculating()) {
+            kochManager.setMode(EdgeRequestMode.EachEdge);
         }
     }
 
@@ -301,7 +308,7 @@ public class Client extends Application {
                 type = ZoomType.DECREASE;
             }
 
-            PacketOut04Zoom zoomPack = new PacketOut04Zoom(type, event.getX(), event.getY());
+            ZoomPacket zoomPack = new ZoomPacket(type, event.getX(), event.getY());
             zoomPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -321,7 +328,7 @@ public class Client extends Application {
 
     private void kochPanelMousePressed(MouseEvent event) {
         try {
-            PacketOut05Press pressPack = new PacketOut05Press(event.getX(), event.getY());
+            PressPacket pressPack = new PressPacket(event.getX(), event.getY());
             pressPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,7 +337,7 @@ public class Client extends Application {
 
     private void kochPanelMouseReleased(MouseEvent event) {
         try {
-            PacketOut06Drag dragPack = new PacketOut06Drag(event.getX(), event.getY());
+            DragPacket dragPack = new DragPacket(event.getX(), event.getY());
             dragPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

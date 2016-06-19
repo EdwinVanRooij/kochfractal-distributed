@@ -5,25 +5,24 @@ import client.packets.PacketIn;
 import client.packets.PacketType;
 
 /**
+ *
  * @author Edwin
  */
-public class PacketIn03FractalDone extends PacketIn {
+public class FractalInfoPacket extends PacketIn {
 
-    private int level = 0;
-    private boolean allowMode;
+    private int level, edgeCount;
 
-    public PacketIn03FractalDone(String data) {
-        super(PacketType.FRACTALDONE);
+    public FractalInfoPacket(String data) {
+        super(PacketType.FRACTALINFO);
 
         String[] args = data.split(Packet.separator);
-
         if (args.length < 2) {
             throw new IllegalArgumentException("Invalid packet format");
         }
 
         try {
-            this.level = Integer.parseInt(args[0]);
-            allowMode = Integer.parseInt(args[1]) == 1;
+            level = Integer.parseInt(args[0]);
+            edgeCount = Integer.parseInt(args[1]);
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Invalid packet data");
         }
@@ -33,7 +32,7 @@ public class PacketIn03FractalDone extends PacketIn {
         return this.level;
     }
 
-    public boolean doAllowMode() {
-        return this.allowMode;
+    public int getEdgeCount() {
+        return this.edgeCount;
     }
 }

@@ -13,12 +13,12 @@ import java.io.IOException;
  *
  * @author Edwin
  */
-public class PacketOut00RequestStartCalc extends PacketOut {
+public class RequestCalcPacket extends PacketOut {
 
     private int level;
     private EdgeRequestMode mode;
 
-    public PacketOut00RequestStartCalc(int level, EdgeRequestMode mode) {
+    public RequestCalcPacket(int level, EdgeRequestMode mode) {
         super(PacketType.REQUEST_START_CALC);
 
         this.level = level;

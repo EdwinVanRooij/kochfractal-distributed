@@ -1,9 +1,9 @@
 package client.packets;
 
 
-import client.packets.in.PacketIn01FractalInfo;
-import client.packets.in.PacketIn02EdgeSingle;
-import client.packets.in.PacketIn03FractalDone;
+import client.packets.in.FractalInfoPacket;
+import client.packets.in.EdgePacket;
+import client.packets.in.FractalDonePacket;
 
 /**
  * @author Edwin
@@ -74,11 +74,11 @@ public abstract class PacketIn extends Packet {
 
         switch (type) {
             case FRACTALINFO:
-                return new PacketIn01FractalInfo(data);
+                return new FractalInfoPacket(data);
             case EDGE_SINGLE:
-                return new PacketIn02EdgeSingle(data);
+                return new EdgePacket(data);
             case FRACTALDONE:
-                return new PacketIn03FractalDone(data);
+                return new FractalDonePacket(data);
         }
 
         return null;

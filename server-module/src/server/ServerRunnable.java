@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 
 public class ServerRunnable implements Runnable {
 
-    private ServerSocket socket;
+    private ServerSocket serverSocket;
     private boolean running = true;
     private int client_id = 0;
     private ExecutorService threadPool;
@@ -23,7 +23,7 @@ public class ServerRunnable implements Runnable {
         System.out.println("[START]: ServerRunnable.ServerRunnable");
         try {
             threadPool = Executors.newCachedThreadPool();
-            socket = new ServerSocket(Const.PORT);
+            serverSocket = new ServerSocket(Const.PORT);
         } catch (IOException ex) {
             running = false;
             System.out.println("Unable to start server");
@@ -37,17 +37,18 @@ public class ServerRunnable implements Runnable {
 
         try {
             while (isRunning()) {
-                Socket clientSocket = socket.accept();
+                Socket clientSocket = serverSocket.accept();
 
                 ClientRunnable client = new ClientRunnable(client_id, this, clientSocket);
                 Thread clientThread = new Thread(client);
                 threadPool.execute(clientThread);
 
-                System.out.format("Thread with ID %s has just connected.\r\n", client_id);
+                System.out.format("Thread with ID '%s' has just connected.\r\n", client_id);
 
                 addClientId();
             }
         } catch (IOException ex) {
+            running = false;
             ex.printStackTrace();
         }
     }

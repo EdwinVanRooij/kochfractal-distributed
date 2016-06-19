@@ -2,9 +2,9 @@ package client;
 
 import calculate.KochManager;
 import client.packets.PacketIn;
-import client.packets.in.PacketIn01FractalInfo;
-import client.packets.in.PacketIn02EdgeSingle;
-import client.packets.in.PacketIn03FractalDone;
+import client.packets.in.FractalInfoPacket;
+import client.packets.in.EdgePacket;
+import client.packets.in.FractalDonePacket;
 import main.Const;
 
 import java.io.BufferedReader;
@@ -73,7 +73,7 @@ public class ClientRunnable implements Runnable {
                     switch (pack.getType()) {
                         case FRACTALINFO:
                             log("Received fractal info packet");
-                            PacketIn01FractalInfo fracInfo = (PacketIn01FractalInfo) pack;
+                            FractalInfoPacket fracInfo = (FractalInfoPacket) pack;
                             man.setLevel(fracInfo.getLevel(), false);
                             man.setEdgeCount(fracInfo.getEdgeCount());
 
@@ -86,13 +86,13 @@ public class ClientRunnable implements Runnable {
                             }
 
                             // Add edge to kochmanager
-                            PacketIn02EdgeSingle edgeSingle = (PacketIn02EdgeSingle) pack;
+                            EdgePacket edgeSingle = (EdgePacket) pack;
                             if (edgeSingle.getLevel() == man.getLevel()) {
                                 man.addEdge(this, edgeSingle.getEdge(), edgeSingle.doAllowMode());
                             }
                             break;
                         case FRACTALDONE:
-                            PacketIn03FractalDone fractalDone = (PacketIn03FractalDone) pack;
+                            FractalDonePacket fractalDone = (FractalDonePacket) pack;
 
                             if (fractalDone.getLevel() == man.getLevel() && calculating) {
                                 log("Fractal done");

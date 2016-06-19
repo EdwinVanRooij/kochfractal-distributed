@@ -11,20 +11,20 @@ import java.io.IOException;
  * @author Edwin
  */
 
-public class PacketOut01FractalInfo extends PacketOut {
+public class FractalDonePacket extends PacketOut {
 
     private final int level;
-    private final int edgeCount;
+    private final boolean allowMode;
 
-    public PacketOut01FractalInfo(int level, int edgeCount) {
-        super(PacketType.FRACTALINFO);
+    public FractalDonePacket(int level, boolean allowMode) {
+        super(PacketType.FRACTALDONE);
 
         this.level = level;
-        this.edgeCount = edgeCount;
+        this.allowMode = allowMode;
     }
 
     public void sendData(DataOutputStream out) throws IOException {
-        out.writeBytes("++" + String.format("%02d", type.getID()) + level + Packet.separator + edgeCount + "==\n");
+        out.writeBytes("++" + String.format("%02d", type.getID()) + level + Packet.separator + (allowMode ? 1 : 0) + "==\n");
         out.flush();
     }
 

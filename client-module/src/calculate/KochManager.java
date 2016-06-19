@@ -1,7 +1,7 @@
 package calculate;
 
 import client.ClientRunnable;
-import client.packets.out.PacketOut00RequestStartCalc;
+import client.packets.out.RequestCalcPacket;
 import javafx.application.Platform;
 import main.Edge;
 import main.EdgeRequestMode;
@@ -95,7 +95,7 @@ public class KochManager {
         });
 
         if (sendPacket) {
-            PacketOut00RequestStartCalc startCalc = new PacketOut00RequestStartCalc(level, mode);
+            RequestCalcPacket startCalc = new RequestCalcPacket(level, mode);
             try {
                 startCalc.sendData(app.getClient().getOutputStream());
             } catch (IOException ex) {

@@ -10,12 +10,12 @@ import main.ZoomType;
  * @author Edwin
  */
 
-public class PacketIn04Zoom extends PacketIn {
+public class ZoomPacket extends PacketIn {
 
     private ZoomType zoomtype;
     private Vector2 position;
 
-    public PacketIn04Zoom(String data) {
+    public ZoomPacket(String data) {
         super(PacketType.ZOOM);
 
         String[] args = data.split(Packet.separator);

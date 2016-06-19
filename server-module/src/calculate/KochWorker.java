@@ -3,9 +3,9 @@ package calculate;
 import main.Edge;
 import main.EdgeRequestMode;
 import server.ClientRunnable;
-import server.packets.out.PacketOut01FractalInfo;
-import server.packets.out.PacketOut02EdgeSingle;
-import server.packets.out.PacketOut03FractalDone;
+import server.packets.out.EdgePacket;
+import server.packets.out.FractalDonePacket;
+import server.packets.out.FractalInfoPacket;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -45,7 +45,7 @@ class KochWorker implements Observer, Runnable {
         frac.setLevel(level);
         frac.addObserver(this);
 
-        PacketOut01FractalInfo infoPack = new PacketOut01FractalInfo(level, frac.getNrOfEdges());
+        FractalInfoPacket infoPack = new FractalInfoPacket(level, frac.getNrOfEdges());
         try {
             infoPack.sendData(client.getOutputStream());
         } catch (IOException ex) {
@@ -62,7 +62,7 @@ class KochWorker implements Observer, Runnable {
 
         // Send calculated edge
         if (mode == EdgeRequestMode.EachEdge && running) {
-            PacketOut02EdgeSingle edgePack = new PacketOut02EdgeSingle(frac.getLevel(), manager.edgeAfterZoomAndDrag((Edge) arg), allowMode);
+            EdgePacket edgePack = new EdgePacket(frac.getLevel(), manager.edgeAfterZoomAndDrag((Edge) arg), allowMode);
             try {
                 edgePack.sendData(client.getOutputStream());
                 edgesWritten++;
@@ -119,7 +119,7 @@ class KochWorker implements Observer, Runnable {
 
                 // Send all edges
                 if (mode == EdgeRequestMode.Single && running) {
-                    PacketOut02EdgeSingle edgePack = new PacketOut02EdgeSingle(frac.getLevel(), manager.edgeAfterZoomAndDrag(e), allowMode);
+                    EdgePacket edgePack = new EdgePacket(frac.getLevel(), manager.edgeAfterZoomAndDrag(e), allowMode);
                     try {
                         edgePack.sendData(client.getOutputStream());
                         edgesWritten++;
@@ -144,7 +144,7 @@ class KochWorker implements Observer, Runnable {
                 // Notify client that edge calculation is done
                 System.out.println("Done calculating level " + frac.getLevel());
 
-                PacketOut03FractalDone donePack = new PacketOut03FractalDone(frac.getLevel(), allowMode);
+                FractalDonePacket donePack = new FractalDonePacket(frac.getLevel(), allowMode);
                 try {
                     donePack.sendData(client.getOutputStream());
                 } catch (IOException ex) {

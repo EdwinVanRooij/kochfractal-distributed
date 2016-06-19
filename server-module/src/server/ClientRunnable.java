@@ -3,10 +3,10 @@ package server;
 import calculate.KochManager;
 import main.EdgeRequestMode;
 import server.packets.PacketIn;
-import server.packets.in.PacketIn00RequestStartCalc;
-import server.packets.in.PacketIn04Zoom;
-import server.packets.in.PacketIn05Press;
-import server.packets.in.PacketIn06Drag;
+import server.packets.in.RequestCalcPacket;
+import server.packets.in.ZoomPacket;
+import server.packets.in.PressPacket;
+import server.packets.in.DragPacket;
 
 import java.io.*;
 import java.net.Socket;
@@ -107,7 +107,7 @@ public class ClientRunnable implements Runnable {
                             manager.stop();
                         }
 
-                        PacketIn00RequestStartCalc startCalc = (PacketIn00RequestStartCalc) pack;
+                        RequestCalcPacket startCalc = (RequestCalcPacket) pack;
                         manager = new KochManager(server, startCalc.getLevel());
 
                         System.out.println("Started calculating edges (Level: " + startCalc.getLevel() + ")");
@@ -118,7 +118,7 @@ public class ClientRunnable implements Runnable {
                             break;
                         }
 
-                        PacketIn04Zoom zoom = (PacketIn04Zoom) pack;
+                        ZoomPacket zoom = (ZoomPacket) pack;
 
                         System.out.println("Started zoom (Level: " + manager.getLevel() + ")");
                         manager.zoom(zoom.getZoomType(), zoom.getPosition());
@@ -130,7 +130,7 @@ public class ClientRunnable implements Runnable {
                             break;
                         }
 
-                        PacketIn05Press press = (PacketIn05Press) pack;
+                        PressPacket press = (PressPacket) pack;
                         manager.press(press.getPosition());
                         break;
                     case DRAG:
@@ -138,7 +138,7 @@ public class ClientRunnable implements Runnable {
                             break;
                         }
 
-                        PacketIn06Drag drag = (PacketIn06Drag) pack;
+                        DragPacket drag = (DragPacket) pack;
                         manager.drag(drag.getPosition());
 
                         manager.calculate(EdgeRequestMode.Single, this, false);

@@ -12,13 +12,13 @@ import java.io.IOException;
  * @author Edwin
  */
 
-public class PacketOut02EdgeSingle extends PacketOut {
+public class EdgePacket extends PacketOut {
 
     private final int level;
     private final Edge edge;
     private final boolean allowMode;
 
-    public PacketOut02EdgeSingle(int level, Edge edge, boolean allowMode) {
+    public EdgePacket(int level, Edge edge, boolean allowMode) {
         super(PacketType.EDGE_SINGLE);
 
         this.level = level;
