@@ -24,15 +24,26 @@ public class ClientRunnable implements Runnable {
     private Socket socket;
     private boolean alive = false;
     private KochManager manager;
+    private DataOutputStream out;
 
     public int getID() {
         return this.id;
+    }
+
+    public DataOutputStream getOutputStream() {
+        return this.out;
     }
 
     ClientRunnable(int id, ServerRunnable server, Socket socket) {
         this.id = id;
         this.server = server;
         this.socket = socket;
+
+        try {
+            this.out = new DataOutputStream(socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void close() throws IOException {
@@ -131,8 +142,9 @@ public class ClientRunnable implements Runnable {
                     this.close();
                     return;
                 } catch (IOException ex1) {
-                    // Ignored situation.
+                    ex1.printStackTrace();
                 }
+                ex.printStackTrace();
             }
         }
     }
