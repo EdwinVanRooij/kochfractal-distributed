@@ -5,11 +5,11 @@ package server.packets;
  */
 public abstract class Packet {
 
-    public static final String separator = "--";
+    protected static final String separator = "--";
 
     protected PacketType type;
 
-    public Packet(PacketType type) {
+    Packet(PacketType type) {
         this.type = type;
     }
 

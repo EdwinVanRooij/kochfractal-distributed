@@ -155,7 +155,7 @@ public class ClientRunnable implements Runnable {
         return this.calculating;
     }
 
-    public void log(String message) {
+    private void log(String message) {
         Throwable t = new Throwable();
         StackTraceElement[] elements = t.getStackTrace();
 

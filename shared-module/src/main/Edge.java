@@ -15,10 +15,13 @@ import java.io.Serializable;
  * @author Peter Boots
  * @author Cas Eliens
  */
-public class Edge implements Serializable {
+class Edge implements Serializable {
 
-    public double X1, Y1, X2, Y2;
-    public transient Color color;
+    private double X1;
+    private double Y1;
+    private double X2;
+    private double Y2;
+    private transient Color color;
     private Vector3 rgb;
 
     public Edge(double X1, double Y1, double X2, double Y2, Color color) {

@@ -13,7 +13,7 @@ import java.util.Observable;
  *
  * @author Peter Boots
  */
-public class KochFractal extends Observable {
+class KochFractal extends Observable {
 
     private int level = 1;      // The current level of the fractal
     private int nrOfEdges = 3;  // The number of edges in the current level of the fractal

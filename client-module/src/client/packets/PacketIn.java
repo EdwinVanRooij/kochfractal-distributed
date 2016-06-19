@@ -12,7 +12,7 @@ public abstract class PacketIn extends Packet {
 
     private static String lastpack = "";
     
-    public PacketIn(PacketType type) {
+    protected PacketIn(PacketType type) {
         super(type);
     }
 

@@ -15,7 +15,7 @@ public abstract class PacketIn extends Packet {
 
     private static HashMap<Integer, String> lastpack = new HashMap<Integer, String>();
 
-    public PacketIn(PacketType type) {
+    protected PacketIn(PacketType type) {
         super(type);
     }
 

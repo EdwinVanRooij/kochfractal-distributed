@@ -22,7 +22,7 @@ import java.util.Observer;
  *
  * @author Cas Eliens
  */
-public class KochWorker implements Observer, Runnable {
+class KochWorker implements Observer, Runnable {
 
     private List<Edge> edges;
     private KochFractal frac;

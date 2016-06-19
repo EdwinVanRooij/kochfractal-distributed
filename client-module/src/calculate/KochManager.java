@@ -35,7 +35,7 @@ public class KochManager {
     }
 
     // Drawing
-    public synchronized void drawEdges(boolean allowMode) {
+    private synchronized void drawEdges(boolean allowMode) {
         app.clearKochPanel();
 
         for (Edge e : this.edges) {
@@ -50,7 +50,7 @@ public class KochManager {
         }
     }
 
-    public synchronized void drawTempEdge(Edge temp) {
+    private synchronized void drawTempEdge(Edge temp) {
         this.tempEdges.add(temp);
 
         app.drawEdge(temp, true);

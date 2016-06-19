@@ -3,7 +3,7 @@ package server;
 /**
  * @author Cas Eliens
  */
-public class Server {
+class Server {
 
     public static void main(String[] args) {
         ServerRunnable server = new ServerRunnable();

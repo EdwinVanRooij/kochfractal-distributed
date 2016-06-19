@@ -104,7 +104,7 @@ public class KochManager implements Serializable {
         workerThread.start();
     }
 
-    public void readCacheFile(ClientRunnable client, boolean allowMode) {
+    private void readCacheFile(ClientRunnable client, boolean allowMode) {
         server.log("Reading cache file for client #" + client.getID());
 
         FileLock lock = null;
@@ -202,7 +202,7 @@ public class KochManager implements Serializable {
     }
 
     // GUI STUFF
-    public void resetZoom() {
+    private void resetZoom() {
         zoom = 500;
         zoomTranslateX = 0;
         zoomTranslateY = 0;

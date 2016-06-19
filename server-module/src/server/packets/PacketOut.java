@@ -8,7 +8,7 @@ import java.io.IOException;
  */
 public abstract class PacketOut extends Packet {
 
-    public PacketOut(PacketType type) {
+    protected PacketOut(PacketType type) {
         super(type);
     }
 
