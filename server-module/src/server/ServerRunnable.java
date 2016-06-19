@@ -20,6 +20,7 @@ public class ServerRunnable implements Runnable {
     private ExecutorService threadPool;
 
     ServerRunnable() {
+        System.out.println("[START]: ServerRunnable.ServerRunnable");
         try {
             threadPool = Executors.newCachedThreadPool();
             socket = new ServerSocket(Const.PORT);
@@ -27,6 +28,7 @@ public class ServerRunnable implements Runnable {
             running = false;
             System.out.println("Unable to start server");
         }
+        System.out.println("[END]: ServerRunnable.ServerRunnable");
     }
 
     @Override

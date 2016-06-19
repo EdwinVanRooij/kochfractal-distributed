@@ -36,6 +36,7 @@ public class ClientRunnable implements Runnable {
     }
 
     ClientRunnable(int id, ServerRunnable server, Socket socket) {
+        System.out.println("[START]: ClientRunnable.ClientRunnable");
         try {
             this.server = server;
             this.socket = socket;
@@ -51,9 +52,11 @@ public class ClientRunnable implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("[END]: ClientRunnable.ClientRunnable");
     }
 
     private void close() throws IOException {
+        System.out.println("[START]: ClientRunnable.close");
         if (!alive) {
             return;
         }
@@ -73,6 +76,7 @@ public class ClientRunnable implements Runnable {
         // Remove cache file
         String path = String.format("/mnt/tempdisk/usercache%s.rand", String.valueOf(this.id));
         Files.deleteIfExists(Paths.get(path));
+        System.out.println("[END]: ClientRunnable.close");
     }
 
     @Override
@@ -151,5 +155,6 @@ public class ClientRunnable implements Runnable {
                 ex.printStackTrace();
             }
         }
+        System.out.println("[END]: ClientRunnable.run");
     }
 }
