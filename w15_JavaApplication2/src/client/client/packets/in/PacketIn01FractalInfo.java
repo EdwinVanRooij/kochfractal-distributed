@@ -1,4 +1,4 @@
-package client.packets.in;
+package client.client.packets.in;
 
 import client.client.packets.Packet;
 import client.client.packets.PacketIn;

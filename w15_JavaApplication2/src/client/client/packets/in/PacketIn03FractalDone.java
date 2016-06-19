@@ -1,28 +1,29 @@
-package client.packets.in;
+package client.client.packets.in;
 
 import client.client.packets.Packet;
 import client.client.packets.PacketIn;
 import client.client.packets.PacketType;
 
 /**
- *
  * @author Cas Eliens
  */
-public class PacketIn01FractalInfo extends PacketIn {
+public class PacketIn03FractalDone extends PacketIn {
 
-    private int level, edgeCount;
+    private int level = 0;
+    private boolean allowMode;
 
-    public PacketIn01FractalInfo(String data) {
-        super(PacketType.FRACTALINFO);
+    public PacketIn03FractalDone(String data) {
+        super(PacketType.FRACTALDONE);
 
         String[] args = data.split(Packet.separator);
+
         if (args.length < 2) {
             throw new IllegalArgumentException("Invalid packet format");
         }
 
         try {
-            level = Integer.parseInt(args[0]);
-            edgeCount = Integer.parseInt(args[1]);
+            this.level = Integer.parseInt(args[0]);
+            allowMode = Integer.parseInt(args[1]) == 1;
         } catch (NumberFormatException ex) {
             throw new IllegalArgumentException("Invalid packet data");
         }
@@ -32,7 +33,7 @@ public class PacketIn01FractalInfo extends PacketIn {
         return this.level;
     }
 
-    public int getEdgeCount() {
-        return this.edgeCount;
+    public boolean doAllowMode() {
+        return this.allowMode;
     }
 }
