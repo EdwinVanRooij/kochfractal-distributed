@@ -34,11 +34,11 @@ public class ServerRunnable implements Runnable {
 
         try {
             while (isRunning()) {
-                Socket clSock = socket.accept();
+                Socket clientSocket = socket.accept();
 
                 System.out.println("Client connected");
 
-                this.clients.add(new ClientRunnable(this, clSock));
+                this.clients.add(new ClientRunnable(this, clientSocket));
             }
         } catch (IOException ex) {
             ex.printStackTrace();

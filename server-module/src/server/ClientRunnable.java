@@ -10,8 +10,8 @@ import server.packets.in.PacketIn06Drag;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author Edwin
@@ -24,27 +24,23 @@ public class ClientRunnable implements Runnable {
     private int id;
     private ServerRunnable server;
     private Socket socket;
-    private BufferedReader in;
-    private DataOutputStream out;
     private boolean alive = false;
     private KochManager manager = null;
 
-    public ClientRunnable(ServerRunnable server, Socket socket) {
-        try {
-            this.server = server;
-            this.socket = socket;
+    public int getID() {
+        return this.id;
+    }
 
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new DataOutputStream(socket.getOutputStream());
+    ClientRunnable(ServerRunnable server, Socket socket) {
+        this.server = server;
+        this.socket = socket;
 
-            this.id = nextID;
-            nextID++;
 
-            Thread th = new Thread(this);
-            th.start();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientRunnable.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.id = nextID;
+        nextID++;
+
+        Thread th = new Thread(this);
+        th.start();
     }
 
     private void close() throws IOException {
@@ -66,21 +62,21 @@ public class ClientRunnable implements Runnable {
         socket.close();
 
         // Remove cache file
-        String path = "/mnt/tempdisk/usercache" + this.id + ".rand";
-        File file = new File(path);
-        if (file.exists()) {
-            file.delete();
-        }
+        String path = String.format("/mnt/tempdisk/usercache%s.rand", String.valueOf(this.id));
+        Files.deleteIfExists(Paths.get(path));
     }
 
     @Override
     public void run() {
-        alive = true;
         System.out.println("[START]: ClientRunnable.run");
+        alive = true;
 
         while (server.isRunning() && alive) {
-            try {
-                String line = in.readLine();
+            try (InputStream is = socket.getInputStream();
+                 InputStreamReader isr = new InputStreamReader(is);
+                 BufferedReader reader = new BufferedReader(isr)) {
+
+                String line = reader.readLine();
 
                 if (line == null) {
                     this.close();
@@ -150,12 +146,5 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public int getID() {
-        return this.id;
-    }
-
-    public DataOutputStream getOutputStream() {
-        return this.out;
-    }
 
 }
