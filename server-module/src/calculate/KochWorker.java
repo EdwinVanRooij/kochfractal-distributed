@@ -142,7 +142,7 @@ class KochWorker implements Observer, Runnable {
 
             if (running && edgesWritten == edges.size()) {
                 // Notify client that edge calculation is done
-                client.getServer().log("Done calculating level " + frac.getLevel());
+                System.out.println("Done calculating level " + frac.getLevel());
 
                 PacketOut03FractalDone donePack = new PacketOut03FractalDone(frac.getLevel(), allowMode);
                 try {

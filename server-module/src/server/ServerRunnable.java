@@ -1,5 +1,7 @@
 package server;
 
+import main.Const;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,8 +23,8 @@ public class ServerRunnable implements Runnable {
 
     public ServerRunnable() {
         try {
-            socket = new ServerSocket(2585);
-            clients = new ArrayList();
+            socket = new ServerSocket(Const.PORT);
+            clients = new ArrayList<>();
             threadPool = Executors.newCachedThreadPool();
 
             // No need to save thread in variable, as it can be called with Thread.currentThread() in this class
@@ -31,19 +33,19 @@ public class ServerRunnable implements Runnable {
 
         } catch (IOException ex) {
             running = false;
-            log("Unable to start server");
+            System.out.println("Unable to start server");
         }
     }
 
     @Override
     public void run() {
-        log("Started listening");
+        System.out.println("[START]: ServerRunnable.run");
 
         try {
             while (isRunning()) {
                 Socket clSock = socket.accept();
 
-                log("Client connected");
+                System.out.println("Client connected");
 
                 this.clients.add(new ClientRunnable(this, clSock));
             }
@@ -70,20 +72,6 @@ public class ServerRunnable implements Runnable {
         }
 
         socket.close();
-    }
-
-    public void log(String message) {
-        Throwable t = new Throwable();
-        StackTraceElement[] elements = t.getStackTrace();
-
-        System.out.println("(" + elements[1].getClassName() + "." + elements[1].getMethodName() + ":" + elements[1].getLineNumber() + "): " + message);
-    }
-    
-    public void errorlog(String message) {
-        Throwable t = new Throwable();
-        StackTraceElement[] elements = t.getStackTrace();
-
-        System.err.println("(" + elements[1].getClassName() + "." + elements[1].getMethodName() + ":" + elements[1].getLineNumber() + "): " + message);
     }
 
     public void submitThread(Runnable runnable) {

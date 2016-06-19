@@ -5,6 +5,7 @@ import client.packets.PacketIn;
 import client.packets.in.PacketIn01FractalInfo;
 import client.packets.in.PacketIn02EdgeSingle;
 import client.packets.in.PacketIn03FractalDone;
+import main.Const;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -37,12 +38,7 @@ public class ClientRunnable implements Runnable {
     public void run() {
         try {
             //socket = new Socket("192.168.117.1", 2585);
-            socket = new Socket("localhost", 2585);
-
-            if (socket == null) {
-                log("Unable to connect to server");
-                return;
-            }
+            socket = new Socket(Const.ADDRESS, Const.PORT);
 
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new DataOutputStream(socket.getOutputStream());

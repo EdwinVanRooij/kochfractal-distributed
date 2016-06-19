@@ -26,8 +26,8 @@ public class KochManager {
 
     public KochManager(Client app) {
         this.app = app;
-        this.edges = new ArrayList();
-        this.tempEdges = new ArrayList();
+        this.edges = new ArrayList<>();
+        this.tempEdges = new ArrayList<>();
 
         // Reset tempedges
         this.tempEdges.clear();
@@ -62,18 +62,16 @@ public class KochManager {
 
         this.tempEdges.clear();
 
-        Platform.runLater(() -> {
-            this.drawEdges(allowMode);
-        });
+        Platform.runLater(() -> this.drawEdges(allowMode));
     }
 
     // Edges
     public synchronized List<Edge> getEdges() {
-        return new ArrayList(this.edges);
+        return new ArrayList<>(this.edges);
     }
 
     public synchronized void setEdges(List<Edge> edges) {
-        this.tempEdges = new ArrayList(edges);
+        this.tempEdges = new ArrayList<>(edges);
     }
 
     public synchronized void addEdge(ClientRunnable client, Edge edge, boolean allowMode) {
@@ -113,9 +111,7 @@ public class KochManager {
 
     public void setEdgeCount(int edgeCount) {
         this.edgeCount = edgeCount;
-        Platform.runLater(() -> {
-            app.setTextNrEdges(edgeCount + "");
-        });
+        Platform.runLater(() -> app.setTextNrEdges(edgeCount + ""));
     }
 
     public int getEdgeCount() {

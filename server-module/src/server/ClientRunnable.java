@@ -54,7 +54,7 @@ public class ClientRunnable implements Runnable {
         alive = false;
 
         server.removeClient(this);
-        server.log("Client disconnected");
+        System.out.println("Client disconnected");
 
         if (manager != null) {
             manager.stop();
@@ -75,7 +75,7 @@ public class ClientRunnable implements Runnable {
     @Override
     public void run() {
         alive = true;
-        server.log("Client started listening");
+        System.out.println("[START]: ClientRunnable.run");
 
         while (server.isRunning() && alive) {
             try {
@@ -103,7 +103,7 @@ public class ClientRunnable implements Runnable {
                         PacketIn00RequestStartCalc startCalc = (PacketIn00RequestStartCalc) pack;
                         manager = new KochManager(server, startCalc.getLevel());
 
-                        server.log("Started calculating edges (Level: " + startCalc.getLevel() + ")");
+                        System.out.println("Started calculating edges (Level: " + startCalc.getLevel() + ")");
                         manager.calculate(startCalc.getMode(), this, true);
                         break;
                     case ZOOM:
@@ -113,7 +113,7 @@ public class ClientRunnable implements Runnable {
 
                         PacketIn04Zoom zoom = (PacketIn04Zoom) pack;
 
-                        server.log("Started zoom (Level: " + manager.getLevel() + ")");
+                        System.out.println("Started zoom (Level: " + manager.getLevel() + ")");
                         manager.zoom(zoom.getZoomType(), zoom.getPosition());
 
                         manager.calculate(EdgeRequestMode.Single, this, false);

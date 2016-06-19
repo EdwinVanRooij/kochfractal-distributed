@@ -227,7 +227,7 @@ public class Client extends Application {
         if (temp) {
             gc.setStroke(Color.WHITE);
         } else {
-            gc.setStroke(e.color);
+            gc.setStroke(e.getColor());
         }
 
         // Set line width depending on level
@@ -240,7 +240,7 @@ public class Client extends Application {
         }
 
         // Draw line
-        gc.strokeLine(e.X1, e.Y1, e.X2, e.Y2);
+        gc.strokeLine(e.getX1(), e.getY1(), e.getX2(), e.getY2());
     }
 
     // Labels

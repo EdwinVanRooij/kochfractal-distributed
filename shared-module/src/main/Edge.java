@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @author Peter Boots
  * @author Cas Eliens
  */
-class Edge implements Serializable {
+public class Edge implements Serializable {
 
     private double X1;
     private double Y1;
@@ -53,6 +53,26 @@ class Edge implements Serializable {
 
     public Vector3 getRGB() {
         return this.rgb;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public double getX1() {
+        return X1;
+    }
+
+    public double getY1() {
+        return Y1;
+    }
+
+    public double getX2() {
+        return X2;
+    }
+
+    public double getY2() {
+        return Y2;
     }
 
     private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {

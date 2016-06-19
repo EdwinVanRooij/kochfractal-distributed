@@ -1,11 +1,12 @@
 package server.packets.out;
 
 import main.Edge;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import server.packets.Packet;
 import server.packets.PacketOut;
 import server.packets.PacketType;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * @author Cas Eliens
@@ -26,7 +27,7 @@ public class PacketOut02EdgeSingle extends PacketOut {
 
     @Override
     public void sendData(DataOutputStream out) throws IOException {
-        String msg = "++" + String.format("%02d", type.getID()) + level + Packet.separator + edge.X1 + Packet.separator + edge.Y1 + Packet.separator + edge.X2 + Packet.separator + edge.Y2 + Packet.separator + edge.getRGB().getX() + Packet.separator + edge.getRGB().getY() + Packet.separator + edge.getRGB().getZ() + Packet.separator + (allowMode ? 1 : 0) + "==\n";
+        String msg = "++" + String.format("%02d", type.getID()) + level + Packet.separator + edge.getX1() + Packet.separator + edge.getY1() + Packet.separator + edge.getX2() + Packet.separator + edge.getY2() + Packet.separator + edge.getRGB().getX() + Packet.separator + edge.getRGB().getY() + Packet.separator + edge.getRGB().getZ() + Packet.separator + (allowMode ? 1 : 0) + "==\n";
         out.writeBytes(msg);
         out.flush();
     }

@@ -105,7 +105,7 @@ public class KochManager implements Serializable {
     }
 
     private void readCacheFile(ClientRunnable client, boolean allowMode) {
-        server.log("Reading cache file for client #" + client.getID());
+        System.out.println("[START]: KochManager.readCacheFile");
 
         FileLock lock = null;
 
@@ -129,7 +129,7 @@ public class KochManager implements Serializable {
                 PacketOut01FractalInfo infoPack = new PacketOut01FractalInfo(level, edgeCount);
                 infoPack.sendData(client.getOutputStream());
             } catch (SocketException ex) {
-                server.errorlog("Failed to send info packet to client");
+                System.out.println("Failed to send info packet to client");
             }
 
             out.position(8);
@@ -164,7 +164,7 @@ public class KochManager implements Serializable {
             }
         }
 
-        server.log("Finished reading cache file for client #" + client.getID());
+        System.out.println("[END]: KochManager.readCacheFile");
     }
 
     public void stop() {
@@ -243,10 +243,10 @@ public class KochManager implements Serializable {
 
     public Edge edgeAfterZoomAndDrag(Edge e) {
         return new Edge(
-                e.X1 * zoom + zoomTranslateX,
-                e.Y1 * zoom + zoomTranslateY,
-                e.X2 * zoom + zoomTranslateX,
-                e.Y2 * zoom + zoomTranslateY,
-                e.color);
+                e.getX1() * zoom + zoomTranslateX,
+                e.getY1() * zoom + zoomTranslateY,
+                e.getX2() * zoom + zoomTranslateX,
+                e.getY2() * zoom + zoomTranslateY,
+                e.getColor());
     }
 }
