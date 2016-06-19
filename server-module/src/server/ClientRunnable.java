@@ -23,7 +23,7 @@ public class ClientRunnable implements Runnable {
     private ServerRunnable server;
     private Socket socket;
     private boolean alive = false;
-    private KochManager manager = null;
+    private KochManager manager;
 
     public int getID() {
         return this.id;
@@ -42,7 +42,6 @@ public class ClientRunnable implements Runnable {
 
         alive = false;
 
-        server.removeClient(this);
         System.out.println("Client disconnected");
 
         if (manager != null) {

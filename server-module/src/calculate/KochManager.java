@@ -19,9 +19,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Edwin
+ *
+ * @author Cas Eliens
  */
-
 public class KochManager implements Serializable {
 
     private int level;
