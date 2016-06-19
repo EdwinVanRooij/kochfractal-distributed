@@ -1,16 +1,14 @@
 package server.packets;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
+
 public abstract class PacketOut extends Packet {
 
     protected PacketOut(PacketType type) {
         super(type);
     }
 
-    public abstract void sendData(DataOutputStream out) throws IOException;
 }

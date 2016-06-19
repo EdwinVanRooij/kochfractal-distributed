@@ -5,7 +5,7 @@ import client.packets.PacketIn;
 import client.packets.PacketType;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public class PacketIn03FractalDone extends PacketIn {
 

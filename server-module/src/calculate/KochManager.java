@@ -15,18 +15,15 @@ import java.net.SocketException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class KochManager implements Serializable {
 
-    private ServerRunnable server;
     private int level;
     private KochWorker manager;
     private Thread workerThread;
@@ -42,7 +39,6 @@ public class KochManager implements Serializable {
     private double lastDragY = 0.0;
 
     public KochManager(ServerRunnable server, int level) {
-        this.server = server;
         this.level = level;
 
         resetZoom();
@@ -179,22 +175,8 @@ public class KochManager implements Serializable {
         }
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public int getLevel() {
         return level;
-    }
-
-    public List<Edge> getEdges() {
-        List<Edge> temp = new ArrayList();
-
-        for (Edge e : this.manager.getEdges()) {
-            temp.add(this.edgeAfterZoomAndDrag(e));
-        }
-
-        return temp;
     }
 
     public boolean isRunning() {

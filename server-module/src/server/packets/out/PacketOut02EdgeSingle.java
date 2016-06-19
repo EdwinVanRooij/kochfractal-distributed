@@ -9,13 +9,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketOut02EdgeSingle extends PacketOut {
 
-    private int level;
-    private Edge edge;
-    private boolean allowMode;
+    private final int level;
+    private final Edge edge;
+    private final boolean allowMode;
 
     public PacketOut02EdgeSingle(int level, Edge edge, boolean allowMode) {
         super(PacketType.EDGE_SINGLE);
@@ -25,7 +26,6 @@ public class PacketOut02EdgeSingle extends PacketOut {
         this.allowMode = allowMode;
     }
 
-    @Override
     public void sendData(DataOutputStream out) throws IOException {
         String msg = "++" + String.format("%02d", type.getID()) + level + Packet.separator + edge.getX1() + Packet.separator + edge.getY1() + Packet.separator + edge.getX2() + Packet.separator + edge.getY2() + Packet.separator + edge.getRGB().getX() + Packet.separator + edge.getRGB().getY() + Packet.separator + edge.getRGB().getZ() + Packet.separator + (allowMode ? 1 : 0) + "==\n";
         out.writeBytes(msg);

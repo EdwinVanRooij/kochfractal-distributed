@@ -14,8 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class ClientRunnable implements Runnable {
 
     private static int nextID = 0;
@@ -46,7 +47,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public void close() throws IOException {
+    private void close() throws IOException {
         if (!alive) {
             return;
         }
@@ -149,14 +150,6 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public ServerRunnable getServer() {
-        return this.server;
-    }
-
-    public boolean isAlive() {
-        return this.alive;
-    }
-
     public int getID() {
         return this.id;
     }
@@ -165,14 +158,4 @@ public class ClientRunnable implements Runnable {
         return this.out;
     }
 
-    public void sendMessageRaw(String message) {
-        if (alive && out != null) {
-            try {
-                out.writeBytes(message);
-                out.flush();
-            } catch (IOException ex) {
-                Logger.getLogger(ClientRunnable.class.getName()).log(Level.SEVERE, null, ex.getMessage());
-            }
-        }
-    }
 }

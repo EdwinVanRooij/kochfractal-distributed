@@ -1,7 +1,7 @@
 package client.packets;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public abstract class Packet {
 

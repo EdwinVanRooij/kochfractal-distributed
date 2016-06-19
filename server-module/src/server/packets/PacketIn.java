@@ -9,11 +9,12 @@ import server.packets.in.PacketIn06Drag;
 import java.util.HashMap;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public abstract class PacketIn extends Packet {
 
-    private static HashMap<Integer, String> lastpack = new HashMap<Integer, String>();
+    private static final HashMap<Integer, String> lastpack = new HashMap<Integer, String>();
 
     protected PacketIn(PacketType type) {
         super(type);

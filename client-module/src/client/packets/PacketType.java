@@ -2,7 +2,7 @@ package client.packets;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public enum PacketType {
 

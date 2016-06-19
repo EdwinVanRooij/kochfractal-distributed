@@ -17,8 +17,9 @@ import java.util.logging.Logger;
 
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class ClientRunnable implements Runnable {
 
     private Socket socket;

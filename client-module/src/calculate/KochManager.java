@@ -14,8 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
 public class KochManager {
 

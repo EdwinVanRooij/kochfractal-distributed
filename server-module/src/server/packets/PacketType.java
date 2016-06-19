@@ -1,14 +1,14 @@
 package server.packets;
 
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public enum PacketType {
 
     INVALID(-1), REQUEST_START_CALC(0), FRACTALINFO(1), EDGE_SINGLE(2), FRACTALDONE(3), ZOOM(4), PRESS(5), DRAG(6);
 
-    private int id;
+    private final int id;
 
     PacketType(int id) {
         this.id = id;

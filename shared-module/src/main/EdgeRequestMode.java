@@ -2,7 +2,7 @@ package main;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public enum EdgeRequestMode {
 

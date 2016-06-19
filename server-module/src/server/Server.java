@@ -1,11 +1,12 @@
 package server;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 class Server {
 
     public static void main(String[] args) {
-        ServerRunnable server = new ServerRunnable();
+        new Thread(new ServerRunnable()).start();
     }
 }

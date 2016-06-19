@@ -1,13 +1,14 @@
 package server.packets;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public abstract class Packet {
 
     protected static final String separator = "--";
 
-    protected PacketType type;
+    protected final PacketType type;
 
     Packet(PacketType type) {
         this.type = type;

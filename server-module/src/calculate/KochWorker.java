@@ -19,18 +19,18 @@ import java.util.Observer;
 
 
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
+
 class KochWorker implements Observer, Runnable {
 
-    private List<Edge> edges;
-    private KochFractal frac;
+    private final List<Edge> edges;
+    private final KochFractal frac;
     private Thread thread;
     private boolean done = false, running = true, allowMode = true;
-    private EdgeRequestMode mode;
-    private ClientRunnable client;
-    private KochManager manager;
+    private final EdgeRequestMode mode;
+    private final ClientRunnable client;
+    private final KochManager manager;
 
     private int edgesWritten = 0;
 

@@ -10,7 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public class PacketOut04Zoom extends PacketOut {
 

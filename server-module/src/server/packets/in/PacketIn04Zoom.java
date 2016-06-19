@@ -7,8 +7,9 @@ import server.packets.PacketType;
 import main.ZoomType;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketIn04Zoom extends PacketIn {
 
     private ZoomType zoomtype;

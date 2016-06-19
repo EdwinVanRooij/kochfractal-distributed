@@ -8,7 +8,7 @@ import main.Vector2;
 import main.Vector3;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public class PacketIn02EdgeSingle extends PacketIn {
 

@@ -6,8 +6,9 @@ import server.packets.PacketIn;
 import server.packets.PacketType;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketIn05Press extends PacketIn {
 
     private Vector2 position;

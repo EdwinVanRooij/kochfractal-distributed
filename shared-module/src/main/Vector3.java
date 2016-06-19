@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public class Vector3 implements Serializable {
 

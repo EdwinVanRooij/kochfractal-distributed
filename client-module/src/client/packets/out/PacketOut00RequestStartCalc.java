@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public class PacketOut00RequestStartCalc extends PacketOut {
 

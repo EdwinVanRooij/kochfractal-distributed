@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public class Vector2 implements Serializable {
 

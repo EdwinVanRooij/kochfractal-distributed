@@ -6,8 +6,9 @@ import server.packets.PacketIn;
 import server.packets.PacketType;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketIn06Drag extends PacketIn {
 
     private Vector2 position;

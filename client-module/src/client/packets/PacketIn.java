@@ -6,7 +6,7 @@ import client.packets.in.PacketIn02EdgeSingle;
 import client.packets.in.PacketIn03FractalDone;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public abstract class PacketIn extends Packet {
 

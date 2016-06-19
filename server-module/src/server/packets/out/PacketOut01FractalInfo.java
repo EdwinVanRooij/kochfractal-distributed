@@ -1,18 +1,20 @@
 package server.packets.out;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import server.packets.Packet;
 import server.packets.PacketOut;
 import server.packets.PacketType;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketOut01FractalInfo extends PacketOut {
 
-    private int level, edgeCount;
+    private final int level;
+    private final int edgeCount;
 
     public PacketOut01FractalInfo(int level, int edgeCount) {
         super(PacketType.FRACTALINFO);
@@ -21,7 +23,6 @@ public class PacketOut01FractalInfo extends PacketOut {
         this.edgeCount = edgeCount;
     }
 
-    @Override
     public void sendData(DataOutputStream out) throws IOException {
         out.writeBytes("++" + String.format("%02d", type.getID()) + level + Packet.separator + edgeCount + "==\n");
         out.flush();

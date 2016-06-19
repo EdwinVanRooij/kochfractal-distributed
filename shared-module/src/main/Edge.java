@@ -13,7 +13,7 @@ import java.io.Serializable;
 /**
  *
  * @author Peter Boots
- * @author Cas Eliens
+ * @author Edwin
  */
 public class Edge implements Serializable {
 

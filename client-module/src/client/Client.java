@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Cas Eliens
+ * @author Edwin
  */
 public class Client extends Application {
 

@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
 public class PacketOut06Drag extends PacketOut {
 

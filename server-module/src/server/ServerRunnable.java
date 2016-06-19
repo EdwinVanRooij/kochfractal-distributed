@@ -7,30 +7,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
- *
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class ServerRunnable implements Runnable {
 
     private ServerSocket socket;
     private List<ClientRunnable> clients;
     private boolean running = true;
-    private ExecutorService threadPool;
 
-    public ServerRunnable() {
+    ServerRunnable() {
         try {
             socket = new ServerSocket(Const.PORT);
             clients = new ArrayList<>();
-            threadPool = Executors.newCachedThreadPool();
-
-            // No need to save thread in variable, as it can be called with Thread.currentThread() in this class
-            Thread th = new Thread(this);
-            th.start();
-
         } catch (IOException ex) {
             running = false;
             System.out.println("Unable to start server");
@@ -54,28 +45,8 @@ public class ServerRunnable implements Runnable {
         }
     }
 
-    public synchronized boolean isRunning() {
+    synchronized boolean isRunning() {
         return this.running;
-    }
-
-    public void close() throws IOException {
-        if (!running) {
-            return;
-        }
-
-        running = false;
-
-        threadPool.shutdownNow();
-
-        for (ClientRunnable client : clients) {
-            client.close();
-        }
-
-        socket.close();
-    }
-
-    public void submitThread(Runnable runnable) {
-        this.threadPool.submit(runnable);
     }
 
     void removeClient(ClientRunnable client) {

@@ -6,8 +6,9 @@ import server.packets.PacketType;
 import main.EdgeRequestMode;
 
 /**
- * @author Cas Eliens
+ * @author Edwin
  */
+
 public class PacketIn00RequestStartCalc extends PacketIn {
 
     private int level;
