@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/w15_JavaApplication2.iml" filepath="$PROJECT_DIR$/w15_JavaApplication2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/client-module/client-module.iml" filepath="$PROJECT_DIR$/client-module/client-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/server-module/server-module.iml" filepath="$PROJECT_DIR$/server-module/server-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shared-module/shared-module.iml" filepath="$PROJECT_DIR$/shared-module/shared-module.iml" />
     </modules>
   </component>
 </project>
